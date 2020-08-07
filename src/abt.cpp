@@ -4,11 +4,14 @@ static const char* xml_text = R"(
 
  <root main_tree_to_execute = "MainTree" >
      <BehaviorTree ID="MainTree">
+     <ReactiveSequence>
+            <BatteryOK/>
         <Sequence name="root">
             <SaySomething     message="start thinking..." />
             <MoveBase         message="running" />
             <SaySomething     message="Yayy" />
         </Sequence>
+     </ReactiveSequence>   
      </BehaviorTree>
  </root>
  )";
@@ -30,6 +33,7 @@ int main(int argc, char* argv[])
   */ 
   factory.registerNodeType<MoveBase>("MoveBase");
     factory.registerNodeType<SaySomething>("SaySomething");
+    factory.registerSimpleCondition("BatteryOK", std::bind(CheckBattery));
 
     auto tree = factory.createTreeFromText(xml_text);
 
