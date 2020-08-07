@@ -26,9 +26,37 @@ public:
     NodeStatus close();
 
 private:
-    bool _open; // shared information
+    bool _open;
 };
+class SaySomething : public BT::SyncActionNode
+{
+  public:
+    SaySomething(const std::string& name, const NodeConfiguration& config)
+      : SyncActionNode(name, config)
+    { }
 
+    static PortsList providedPorts()
+    {
+        return { InputPort<std::string>("message") };
+    }
+
+    BT::NodeStatus tick();
+};
+class ThinkWhatToSay : public BT::SyncActionNode
+{
+  public:
+    ThinkWhatToSay(const std::string& name, const NodeConfiguration& config)
+      : SyncActionNode(name, config)
+    {
+    }
+
+    static PortsList providedPorts()
+    {
+        return { OutputPort<std::string>("text") };
+    }
+    BT::NodeStatus tick();
+};
+BT::NodeStatus SaySomethingSimple(BT::TreeNode& self);
 
 }
 

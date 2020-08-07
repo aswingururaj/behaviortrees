@@ -24,5 +24,31 @@ NodeStatus GripperInterface::close()
         _open = false;
         return NodeStatus::SUCCESS;
     }
+NodeStatus SaySomething::tick()
+    {
+        Optional<std::string> msg = getInput<std::string>("message");
+        if (!msg)
+        {
+            throw BT::RuntimeError("missing required input [message]: ", 
+                                   msg.error() );
+        }
+        std::cout << "Robot says: " << msg.value() << std::endl;
+        return NodeStatus::SUCCESS;
+    }
+NodeStatus ThinkWhatToSay::tick()
+    {
+        setOutput("text", "The answer is 42" );
+        return NodeStatus::SUCCESS;
+    }
+BT::NodeStatus SaySomethingSimple(BT::TreeNode &self)
+{
+    auto msg = self.getInput<std::string>("message");
+    if (!msg)
+    {
+        throw BT::RuntimeError( "missing required input [message]: ", msg.error() );
+    }
 
+    std::cout << "Robot says: " << msg.value() << std::endl;
+    return BT::NodeStatus::SUCCESS;
+}
 }
