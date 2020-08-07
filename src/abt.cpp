@@ -6,12 +6,8 @@ static const char* xml_text = R"(
      <BehaviorTree ID="MainTree">
         <Sequence name="root">
             <SaySomething     message="start thinking..." />
-            <ThinkWhatToSay   text="{the_answer}"/>
-            <SetBlackboard   output_key="OtherGoal" value="BB buddy" />
-            <SaySomething     message="{OtherGoal}" />
-            <SaySomething     message="{the_answer}" />
-            <SaySomething2    message="SaySomething2 works too..." />
-            <SaySomething2    message="{the_answer}" />
+            <MoveBase         message="running" />
+            <SaySomething     message="Yayy" />
         </Sequence>
      </BehaviorTree>
  </root>
@@ -32,12 +28,25 @@ int main(int argc, char* argv[])
   auto tree = factory.createTreeFromText(xml_text);
   tree.tickRoot();
   */ 
-  factory.registerNodeType<SaySomething>("SaySomething");
-  factory.registerNodeType<ThinkWhatToSay>("ThinkWhatToSay");
-  PortsList say_something_ports = { InputPort<std::string>("message") };
-  factory.registerSimpleAction("SaySomething2", SaySomethingSimple, say_something_ports );
-  auto tree = factory.createTreeFromText(xml_text);
-  tree.tickRoot();
+  factory.registerNodeType<MoveBase>("MoveBase");
+    factory.registerNodeType<SaySomething>("SaySomething");
+
+    auto tree = factory.createTreeFromText(xml_text);
+
+    NodeStatus status;
+
+    std::cout << "\n--- 1st executeTick() ---" << std::endl;
+    status = tree.tickRoot();
+
+    SleepMS(150);
+    std::cout << "\n--- 2nd executeTick() ---" << std::endl;
+    status = tree.tickRoot();
+
+    SleepMS(150);
+    std::cout << "\n--- 3rd executeTick() ---" << std::endl;
+    status = tree.tickRoot();
+
+    std::cout << std::endl;
   /* 
   factory.registerNodeType<CalculateGoal>("CalculateGoal");
   factory.registerNodeType<PrintTarget>("PrintTarget");

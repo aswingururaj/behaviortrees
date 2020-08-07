@@ -32,14 +32,14 @@ namespace BT
         }
     }
 }*/
-class ApproachObject : public BT::SyncActionNode
+class ApproachObject : public SyncActionNode
 {
   public:
     ApproachObject(const std::string& name) :
         BT::SyncActionNode(name, {})
     {
     }
-    BT::NodeStatus tick();
+    NodeStatus tick();
 };
 BT::NodeStatus CheckBattery();
 class GripperInterface
@@ -54,7 +54,7 @@ public:
 private:
     bool _open;
 };
-class SaySomething : public BT::SyncActionNode
+class SaySomething : public SyncActionNode
 {
   public:
     SaySomething(const std::string& name, const NodeConfiguration& config)
@@ -66,9 +66,9 @@ class SaySomething : public BT::SyncActionNode
         return { InputPort<std::string>("message") };
     }
 
-    BT::NodeStatus tick();
+    NodeStatus tick();
 };
-class ThinkWhatToSay : public BT::SyncActionNode
+class ThinkWhatToSay : public SyncActionNode
 {
   public:
     ThinkWhatToSay(const std::string& name, const NodeConfiguration& config)
@@ -80,9 +80,29 @@ class ThinkWhatToSay : public BT::SyncActionNode
     {
         return { OutputPort<std::string>("text") };
     }
-    BT::NodeStatus tick();
+    NodeStatus tick();
+};
+class MoveBase : public AsyncActionNode
+{
+  public:
+    MoveBase(const std::string& name, const NodeConfiguration& config)
+      : AsyncActionNode(name, config)
+    { }
+
+    static PortsList providedPorts()
+    {
+        return { InputPort<std::string>("message") };
+    }
+
+    NodeStatus tick();
+
+    void halt();
+
+  private:
+    std::atomic_bool _halt_requested;
 };
 BT::NodeStatus SaySomethingSimple(BT::TreeNode& self);
+inline void SleepMS(int ms);
 /*
 class CalculateGoal: public BT::SyncActionNode
 {

@@ -51,6 +51,32 @@ BT::NodeStatus SaySomethingSimple(BT::TreeNode &self)
     std::cout << "Robot says: " << msg.value() << std::endl;
     return BT::NodeStatus::SUCCESS;
 }
+inline void SleepMS(int ms)
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+NodeStatus MoveBase::tick()
+    {
+        Optional<std::string> msg = getInput<std::string>("message");
+        if (!msg)
+        {
+            throw BT::RuntimeError("missing required input [message]: ", 
+                                   msg.error() );
+        }
+        std::cout << "Robot says: " << msg.value() << std::endl;
+        _halt_requested.store(false);
+        int count = 0;
+        while (!_halt_requested && count++ < 25)
+        {
+            SleepMS(10);
+        }
+        std::cout << "Robot Says: DONE" << std::endl;
+        return _halt_requested ? NodeStatus::FAILURE : NodeStatus::SUCCESS;
+    }
+void MoveBase::halt()
+{
+    _halt_requested.store(true);
+}
 /*
 NodeStatus CalculateGoal::tick()
     {
