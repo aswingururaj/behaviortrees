@@ -51,4 +51,22 @@ BT::NodeStatus SaySomethingSimple(BT::TreeNode &self)
     std::cout << "Robot says: " << msg.value() << std::endl;
     return BT::NodeStatus::SUCCESS;
 }
+/*
+NodeStatus CalculateGoal::tick()
+    {
+        Position2D mygoal = {1.1, 2.3};
+        setOutput<Position2D>("goal", mygoal);
+        return NodeStatus::SUCCESS;
+    }
+NodeStatus PrintTarget::tick()
+    {
+        auto res = getInput<Position2D>("target");
+        if( !res )
+        {
+            throw RuntimeError("error reading port [target]:", res.error());
+        }
+        Position2D target = res.value();
+        printf("Target positions: [ %.1f, %.1f ]\n", target.x, target.y );
+        return NodeStatus::SUCCESS;
+    }*/
 }

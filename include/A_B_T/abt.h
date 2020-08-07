@@ -5,7 +5,33 @@
 #include "behaviortree_cpp_v3/behavior_tree.h"
 using namespace BT;
 namespace sample{
+/*struct Position2D 
+{ 
+  double x;
+  double y; 
+};
+namespace BT
+{
+    using namespace BT;
+    template <> inline Position2D convertFromString(StringView str)
+    {
+        // The next line should be removed...
+        printf("Converting string: \"%s\"\n", str.data() );
 
+        // We expect real numbers separated by semicolons
+        auto parts = splitString(str, ';');
+        if (parts.size() != 2)
+        {
+            throw RuntimeError("invalid input)");
+        }
+        else{
+            Position2D output;
+            output.x     = convertFromString<double>(parts[0]);
+            output.y     = convertFromString<double>(parts[1]);
+            return output;
+        }
+    }
+}*/
 class ApproachObject : public BT::SyncActionNode
 {
   public:
@@ -57,7 +83,38 @@ class ThinkWhatToSay : public BT::SyncActionNode
     BT::NodeStatus tick();
 };
 BT::NodeStatus SaySomethingSimple(BT::TreeNode& self);
+/*
+class CalculateGoal: public BT::SyncActionNode
+{
+public:
+    CalculateGoal(const std::string& name, const NodeConfiguration& config):
+        SyncActionNode(name,config)
+    {}
 
+    static PortsList providedPorts()
+    {
+        return { OutputPort<Position2D>("goal") };
+    }
+    BT::NodeStatus tick();
+};
+
+
+class PrintTarget: public BT::SyncActionNode
+{
+public:
+    PrintTarget(const std::string& name, const NodeConfiguration& config):
+        SyncActionNode(name,config)
+    {}
+
+    static PortsList providedPorts()
+    {
+        const char*  description = "Simply print the goal on console...";
+        return { InputPort<Position2D>("target", description) };
+    }
+
+    BT::NodeStatus tick();
+};
+*/
 }
 
 
